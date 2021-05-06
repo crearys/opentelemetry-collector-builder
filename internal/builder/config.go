@@ -46,9 +46,9 @@ type Config struct {
 // Distribution holds the parameters for the final binary
 type Distribution struct {
 	Module         string `mapstructure:"module"`
-	ExeName        string `mapstructure:"name"`
+	Command        string `mapstructure:"name"`
 	Go             string `mapstructure:"go"`
-	LongName       string `mapstructure:"description"`
+	Description    string `mapstructure:"description"`
 	OtelColVersion string `mapstructure:"otelcol_version"`
 	IncludeCore    bool   `mapstructure:"include_core"`
 	OutputPath     string `mapstructure:"output_path"`
