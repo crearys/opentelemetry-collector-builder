@@ -26,14 +26,15 @@ import (
 	"go.uber.org/zap"
 )
 
-const defaultOtelColVersion = "0.26.0"
+const defaultOtelColVersion = "0.30.0"
 
 // ErrInvalidGoMod indicates an invalid gomod
 var ErrInvalidGoMod = errors.New("invalid gomod specification for module")
 
 // Config holds the builder's configuration
 type Config struct {
-	Logger logr.Logger
+	Logger          logr.Logger
+	SkipCompilation bool
 
 	Distribution Distribution `mapstructure:"dist"`
 	Exporters    []Module     `mapstructure:"exporters"`

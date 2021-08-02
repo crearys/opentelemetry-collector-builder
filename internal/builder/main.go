@@ -93,6 +93,11 @@ func Generate(cfg Config) error {
 
 // Compile generates a binary from the sources based on the configuration
 func Compile(cfg Config) error {
+	if cfg.SkipCompilation {
+		cfg.Logger.Info("Generating source codes only, the distribution will not be compiled.")
+		return nil
+	}
+
 	// first, we test to check if we have Go at all
 	goBinary, err := getGoPath(cfg)
 	if err != nil {
@@ -119,14 +124,14 @@ func GetModules(cfg Config) error {
 	}
 
 	cfg.Logger.Info("Getting go modules")
-	cmd := exec.Command(goBinary, "mod", "download")
-	cmd.Dir = cfg.Distribution.OutputPath
 
 	// basic retry if error from go mod command (in case of transient network error). This could be improved
 	// retry 3 times with 5 second spacing interval
 	retries := 3
 	failReason := "unknown"
 	for i := 1; i <= retries; i++ {
+		cmd := exec.Command(goBinary, "mod", "download", "all")
+		cmd.Dir = cfg.Distribution.OutputPath
 		if out, err := cmd.CombinedOutput(); err != nil {
 			failReason = fmt.Sprintf("%s. Output: %q", err, out)
 			cfg.Logger.Info("Failed modules download", "retry", fmt.Sprintf("%d/%d", i, retries))
